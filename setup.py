@@ -30,6 +30,8 @@ def _initial_setup():
     except myc.DatabaseError as e:
         if e.msg == "Can't create database 'quizproject'; database exists":
             return print("[INFO]: Initial setup was already done before.")
+        print(e.msg)
+    
     _execbulk("""USE quizproject
               CREATE TABLE questions (qn varchar(60), options int, ans varchar(1))
               CREATE TABLE leaderboard (name varchar(40), qnscorrect int, qnsattempted int, ratio FLOAT, passkey varchar(5))""")
