@@ -47,7 +47,7 @@ def runquiz(num, passkey):
             print(f"Wrong answer. The correct answer is {ans}")
             cur.execute("UPDATE leaderboard SET qnsattempted=qnsattempted+1 WHERE passkey = %s", (passkey,))
             continue
-    cur.execute("UPDATE leaderboard SET ratio = %s WHERE passkey = %s", (qnscorrect/qnsattempted_, passkey))
+    cur.execute("UPDATE leaderboard SET ratio = %s WHERE passkey = %s", ((qnscorrect/qnsattempted_)*100, passkey))
     con.commit()
     con.close()
     
@@ -109,6 +109,7 @@ Please select an option below.
 4. Exit Program.""")
                         break
                     continue
+                con.close()
                 runquiz(numqn, passky)
         elif cheh == '2':
             total,pos_ = getleaderboardpos(passky)
