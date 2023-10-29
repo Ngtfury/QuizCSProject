@@ -55,7 +55,10 @@ def runquiz(num, passkey):
 
 
 
-def startgame(acc):
+def startgame(passky):
+    con,cur = setup._connect_(True)
+    cur.execute("SELECT * FROM leaderboard WHERE passkey = %s", (passky,))
+    acc = cur.fetchall()[0]
     _accname = acc[0]
     _qnattended = acc[1]
     qnscorrect = acc[2]
@@ -71,13 +74,11 @@ def startgame(acc):
         _ratioprompt = 'Not so good'
     else:
         _ratioprompt = 'Very bad'
-
-    passky = acc[4]
     print(f"Hello, you are now logged in as {_accname}!")
     print("""
 Please select an option below.
 1. Start a new quiz.
-2. See you stats.
+2. See your stats.
 3. Delete your account.
 4. Exit Program.""")
     while True:
@@ -103,7 +104,7 @@ Please select an option below.
                         print("""
 Please select an option below.
 1. Start a new quiz.
-2. See you stats.
+2. See your stats.
 3. Delete your account.
 4. Exit Program.""")
                         break
@@ -118,10 +119,12 @@ Your overall performance ratio is {ratio}. Which is {_ratioprompt}!
 Your position in the leaderboard is {pos_} out of {total} players!
 Please note that your performance ratio determines your position in the leaderboard."""
             )
+            con.close()
             return
         elif cheh == '3':
             ...
         elif cheh == '4':
+            con.close()
             print("Good byee!")
             return
 
@@ -147,7 +150,7 @@ If you already have an account please login with your passkey.\n"""
                 print("There is no account associated with that passkey ❌")
                 continue
             con.close()
-            startgame(acc[0])
+            startgame(passkey_)
             break
         elif ch == '2':
             name_ = input("Enter your name: ")
@@ -157,11 +160,11 @@ If you already have an account please login with your passkey.\n"""
                     cur.execute("INSERT INTO leaderboard VALUES (%s,%s,%s,%s,%s)", (name_,0,0,0,passkey_))
                     con.commit()
                     print("Your account has been created successfully! ✅")
-                    ch = input("Do you want to start the quiz? (Y/N)").lower()
-                    if ch == 'y':
-                        con.close()
-                        startgame((name_,0,0,0,passkey_))
-                        break
+                    #ch = input("Do you want to start the quiz? (Y/N): ").lower()
+                    #if ch == 'y':
+                    con.close()
+                    startgame(passkey_)
+                    break
                 except myc.IntegrityError as e:
                     print("That passkey already exist for another account. Please try again with a different passkey.")
                     continue
