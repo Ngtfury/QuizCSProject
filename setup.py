@@ -31,10 +31,10 @@ def _connect_(db=False):
         return con,cur
     except myc.Error as e:
         print('[Error]:',e.msg)
-    
-con,cur = _connect_()
 
-def _execbulk(query,data=None):
+
+def _execbulk(query,cur,data=None):
+    
     if not '\n' in query:
         return cur.execute(query,data) if data else cur.execute(query)
     splt = query.split('\n')
@@ -44,13 +44,15 @@ def _execbulk(query,data=None):
         except myc.Error as e:
             print('[Error]: ',e.msg)
 
-def _insertqns():
+def _insertqns(con,cur):
+    print('[Info]: Inserting questions data.')
     for question in QUESTIONS:
         cur.execute("INSERT INTO questions VALUES (%s, %s, %s)", (question[0], question[1], question[2]))
     con.commit()
     print("[Info]: All the data has been inserted.")
 
 def _initial_setup():
+    con,cur = _connect_()
     try:
         cur.execute("CREATE DATABASE quizproject")
     except myc.DatabaseError as e:
@@ -59,10 +61,9 @@ def _initial_setup():
         print(e.msg)
     
     _execbulk("""USE quizproject
-              CREATE TABLE questions (qn varchar(60), options varchar(100), ansindex int)
-              CREATE TABLE leaderboard (name varchar(40), qnscorrect int, qnsattempted int, ratio FLOAT, passkey varchar(5))""")
+              CREATE TABLE questions (qn varchar(200), options varchar(200), ansindex int)
+              CREATE TABLE leaderboard (name varchar(40), qnscorrect int, qnsattempted int, ratio FLOAT, passkey varchar(5))""",
+              cur)
     print("[INFO]: Initial setup has finished.")
-    _insertqns()
-
-
-_initial_setup()
+    _insertqns(con,cur)
+    con.close()
