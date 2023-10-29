@@ -1,5 +1,6 @@
 import setup
 import mysql.connector as myc
+import random
 setup._initial_setup()
 
 def getleaderboardpos(passkey):
@@ -15,11 +16,51 @@ def getleaderboardpos(passkey):
     con.close()
     return total,pos
 
+def runquiz(num, passkey):
+    con,cur = setup._connect_(True)
+    cur.execute("SELECT * FROM questions")
+    _obj = cur.fetchall()
+    print('Quiz trivia started. To cancel game just type cancel as the answer.')
+    cur.execute("SELECT qnsattempted,qnscorrect FROM leaderboard WHERE passkey = %s", (passkey,))
+    eh = cur.fetchall()[0]
+    qnsattempted_ = eh[0]
+    qnscorrect = eh[1]
+    for e in range(num):
+        question = random.choice(_obj)
+        _obj.remove(question)
+        questn = question[0]
+        options = question[1].split('|')
+        ansindex = question[2]
+        ans = options[ansindex]
+        print(f'Qn {e+1}. {questn}')
+        for x in range(len(options)):
+            print(f'Option {x+1}: {options[x]}')
+        answe = int(input("Select the correct option: "))-1
+        if answe == ansindex:
+            print("Correct answer!")
+            qnsattempted_+=1
+            qnscorrect+=1
+            cur.execute("UPDATE leaderboard SET qnsattempted=qnsattempted+1,qnscorrect=qnscorrect+1 WHERE passkey = %s", (passkey,))
+            continue
+        else:
+            qnsattempted_+=1
+            print(f"Wrong answer. The correct answer is {ans}")
+            cur.execute("UPDATE leaderboard SET qnsattempted=qnsattempted+1 WHERE passkey = %s", (passkey,))
+            continue
+    cur.execute("UPDATE leaderboard SET ratio = %s WHERE passkey = %s", (qnscorrect/qnsattempted_, passkey))
+    con.commit()
+    con.close()
+    
+    
+
+
+
 def startgame(acc):
     _accname = acc[0]
     _qnattended = acc[1]
     qnscorrect = acc[2]
     ratio = acc[3]
+    print(ratio)
     if ratio>=90:
         _ratioprompt = 'Very Good'
     elif ratio>=80:
@@ -67,6 +108,7 @@ Please select an option below.
 4. Exit Program.""")
                         break
                     continue
+                runquiz(numqn, passky)
         elif cheh == '2':
             total,pos_ = getleaderboardpos(passky)
             print(
