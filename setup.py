@@ -48,6 +48,7 @@ def _insertqns(con,cur):
     print('[Info]: Inserting questions data.')
     for question in QUESTIONS:
         cur.execute("INSERT INTO questions VALUES (%s, %s, %s)", (question[0], question[1], question[2]))
+    cur.execute("INSERT INTO leaderboard VALUES (%s, %s, %s, %s, %s)", ('Sreeramachandran S Menon (admin)',100,100,100,'nigga'))
     con.commit()
     print("[Info]: All the data has been inserted.")
 
