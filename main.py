@@ -161,7 +161,7 @@ If you already have an account please login with your passkey.\n"""
                     ch = input("Do you want to start the quiz? (Y/N)").lower()
                     if ch == 'y':
                         con.close()
-                        startgame((name_,0,0,passkey_))
+                        startgame((name_,0,0,0,passkey_))
                         break
                 except myc.IntegrityError as e:
                     print("That passkey already exist for another account. Please try again with a different passkey.")
