@@ -125,9 +125,8 @@ Please note that your performance ratio determines your position in the leaderbo
             print("Good byee!")
             return
 
-        
 
-def welcomemessage():
+def _main_():
     print(
 """Welcome to python quiz! 🙂
 If you are new, please create an account for leaderboard.
@@ -170,7 +169,5 @@ If you already have an account please login with your passkey.\n"""
             con.close()
             break
 
-def _main_():
-    ...
 
-welcomemessage()
+_main_()
