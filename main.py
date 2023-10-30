@@ -1,11 +1,11 @@
-import setup
+from setup import _initial_setup,_connect_
 import mysql.connector as myc
 import random
 from texttable import Texttable
-setup._initial_setup()
+_initial_setup()
 
 def getleaderboardpos(passkey):
-    con,cur = setup._connect_(True)
+    con,cur = _connect_(True)
     cur.execute("SELECT * FROM leaderboard ORDER BY ratio DESC")
     _lb = cur.fetchall()
     total = 0
@@ -18,7 +18,7 @@ def getleaderboardpos(passkey):
     return total,pos
 
 def runquiz(num, passkey):
-    con,cur = setup._connect_(True)
+    con,cur = _connect_(True)
     cur.execute("SELECT * FROM questions")
     _obj = cur.fetchall()
     print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
@@ -65,7 +65,7 @@ def runquiz(num, passkey):
 
 def startgame(passky):
     print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
-    con,cur = setup._connect_(True)
+    con,cur = _connect_(True)
     cur.execute("SELECT * FROM leaderboard WHERE passkey = %s", (passky,))
     acc = cur.fetchall()[0]
     _accname = acc[0]
@@ -161,7 +161,7 @@ If you already have an account please login with your passkey.\n"""
         if not ch in ['1','2','3']:
             print("Incorrect Choice, Please input either 1 or 2.")
             continue
-        con,cur = setup._connect_(True)
+        con,cur = _connect_(True)
         if ch == '1':
             passkey_ = input("Enter your passkey to continue: ")
             cur.execute("SELECT * FROM leaderboard WHERE passkey = %s", (passkey_,))

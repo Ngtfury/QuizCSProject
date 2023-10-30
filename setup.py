@@ -9,7 +9,13 @@ QUESTIONS = [
     ['Which SQL statement is used to delete data from a database?',"REMOVE|COLLAPSE|DELETE",2],
     ['Which SQL statement is used to return only different values?',"SELECT UNIQUE|SELECT DISTINCT|SELECT DIFFERENT", 1],
     ['Which SQL keyword is used to sort the result-set?', "ORDER BY|ORDER|SORT BY", 0],
-    ['With SQL, how can you insert a new record into the "Persons" table?',"INSERT VALUES ('Ajay Paul', 'Paulose') INTO Persons|INSERT ('Ajay Paul', 'Paulose') INTO Persons|INSERT INTO Persons VALUES('Ajay Paul', 'Paulose')",2]
+    ['With SQL, how can you insert a new record into the "Persons" table?',"INSERT VALUES ('Ajay Paul', 'Paulose') INTO Persons|INSERT ('Ajay Paul', 'Paulose') INTO Persons|INSERT INTO Persons VALUES('Ajay Paul', 'Paulose')",2],
+    ['Which of the following is used to define a block of code in Python language?', 'Indentation|Key|Brackets', 0],
+    ['Which keyword is used for function in Python language?', 'function|def|fun', 1],
+    ['What arithmetic operators cannot be used with strings in Python?', '+|-|*', 1],
+    ['To add a new element to a list we use which Python command?', 'append|add|insert', 0]
+    ['Which of the following is a Python tuple?', '[1,2,3]|(5)|(6,)', 2],
+    ['Which is the default order of sort in ORDER BY clause?', 'Ascending|Descending', 0],
 ]
 
 def _connect_(db=False):
